@@ -28,11 +28,13 @@ jobs:
 
             cd /home/elyvium/projects/deploy-tool
 
-            SHA="${{ github.event.pull_request.merge_commit_sha }}"
-            echo "Deploying merged commit: $SHA"
-
             git fetch --prune origin
-            git checkout -f "$SHA"
+            git checkout main
+            git reset --hard origin/main
+            git clean -fd
+
+            echo "Now at: $(git rev-parse --short HEAD)"
+            git log -1 --oneline
 
             docker compose up -d --build
             docker compose ps

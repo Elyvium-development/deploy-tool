@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  elyvium-deploy-tool-ui:
+    image: elyvium-deploy-tool-ui:dev
+    container_name: elyvium-deploy-tool-ui-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7070:7070"
+    environment:
+      - DEPLOY_UI_HOST=0.0.0.0
+      - DEPLOY_UI_PORT=7070
+      # - DEPLOY_UI_RELOAD=1  # optional (not usually used in containers)
+    volumes:
+      # Give the container access to your repos (must match ALLOWED_ROOTS)
+      - /home/elyvium/projects/ecosystem:/home/elyvium/projects/ecosystem:rw
+
+      # Allow container to control host Docker (required for docker compose up)
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped

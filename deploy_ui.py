@@ -411,3 +411,4 @@ if __name__ == "__main__":
         uvicorn.run(f"{module_name}:app", host=HOST, port=PORT, reload=True)
     else:
         uvicorn.run(app, host=HOST, port=PORT)
+

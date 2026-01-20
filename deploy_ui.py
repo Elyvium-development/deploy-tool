@@ -179,6 +179,13 @@ def _deploy_frontend(env: EnvConfig, work_front_dir: str, branch: str) -> str:
 
     _assert_git_repo(work_front_dir)
 
+    # allow this repo path for the current container user
+    safe_dir = os.path.abspath(work_front_dir)
+    _run_cmd_capture(
+        ["git", "config", "--global", "--add", "safe.directory", safe_dir],
+        cwd=work_front_dir,
+    )
+
     script_path = os.path.join(work_front_dir, env.front_deploy_script)
     _assert_file_exists(script_path)
 
@@ -199,6 +206,13 @@ def _deploy_backend(env: EnvConfig, work_back_dir: str, branch: str) -> str:
 
     _assert_git_repo(work_back_dir)
 
+      # allow this repo path for the current container user
+    safe_dir = os.path.abspath(work_back_dir)
+    _run_cmd_capture(
+        ["git", "config", "--global", "--add", "safe.directory", safe_dir],
+        cwd=work_back_dir,
+    )
+    
     log += f"Backend Directory  : {work_back_dir}\n"
     log += f"Branch             : {branch}\n"
     log += f"Docker Compose     : {env.backend_compose_command}\n"

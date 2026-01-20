@@ -3,8 +3,7 @@ name: Deploy on merge to main
 on:
   pull_request:
     types: [closed]
-    branches:
-      - main
+    branches: [main]
 
 concurrency:
   group: deploy-main
@@ -29,11 +28,11 @@ jobs:
 
             cd /home/elyvium/projects/deploy-tool
 
-            # Make sure we're on main and synced (stronger than plain git pull)
+            SHA="${{ github.event.pull_request.merge_commit_sha }}"
+            echo "Deploying merged commit: $SHA"
+
             git fetch --prune origin
-            git checkout main
-            git reset --hard origin/main
-            git clean -fd
+            git checkout -f "$SHA"
 
             docker compose up -d --build
             docker compose ps
